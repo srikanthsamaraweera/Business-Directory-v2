@@ -1,0 +1,13 @@
+
+.pink-background{
+    background-color: #E429A9;
+}
+
+.custom-dialog-title{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color:white;
+    background-color: #E429A9;
+    padding: 1%;
+    font-weight: bold;
+}

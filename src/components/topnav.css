@@ -1,0 +1,29 @@
+.searchbutton{
+    background-color: #E429A9;
+}
+.magenta-bg{
+    background-color: #E429A9;
+}
+.magenta-text{
+    color: #E429A9;
+}
+.nav-box-shadow{
+    box-shadow: 0px 0px 5px 1px;
+}
+.nav-box-shadow-bottom{
+    box-shadow: 0px 0px 5px 1px;
+}
+.grey-bg{
+    background-color: #a3a3a3;
+}
+.grey-text{
+    color: #a3a3a3;
+}
+.loggedinmenu{
+    width: 100px;
+    height: 200px;
+    background-color: gray;
+    position: absolute;
+    top:30px;
+    right:30px;
+}
