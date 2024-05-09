@@ -1,15 +1,37 @@
 "use client";
 import SaveUser from "@/functions/saveuser";
 import "./register.css";
-import { Result } from "postcss";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+
+import ReCAPTCHA from "react-google-recaptcha";
+import { verifyCaptcha } from "@/functions/validaterecaptcha";
 
 export default function RegForm() {
   const [emailerror, setemailerror] = useState("");
   const [confirmerror, setconfirmerror] = useState("");
   const [passreqerror, setpassreqerror] = useState("");
   const [loading, setloading] = useState("");
+
+  //code for recaptcha
+  const [isverified, setisverified] = useState("");
+  const [captchamessage, setcaptchamessage] = useState("");
+  const recaptchaRef = useRef(null);
+
+  async function handleCaptchaSubmission(token) {
+    setcaptchamessage("");
+    // Server function to verify captcha
+    console.log("verifying captcha...");
+    const captchares = await verifyCaptcha(token);
+    console.log("captcha res - ", captchares);
+    setisverified(captchares);
+
+    // await verifyCaptcha(token)
+    //   .then(() => setisverified(true))
+    //   .catch(() => setisverified(false));
+  }
+
+  //code for recaptcha ends
 
   async function Loadset(status) {
     setloading(status);
@@ -21,14 +43,19 @@ export default function RegForm() {
     const formData = new FormData(form);
 
     await Loadset(true);
-    const result = await SaveUser(formData);
-    try {
-      setemailerror(result.emailerror);
-      setconfirmerror(result.confirmerror);
-      setpassreqerror(result.passreqerror);
-    } catch (e) {}
-
-    await Loadset(false);
+    if (isverified == "success!") {
+      setcaptchamessage("");
+      const result = await SaveUser(formData);
+      try {
+        setemailerror(result.emailerror);
+        setconfirmerror(result.confirmerror);
+        setpassreqerror(result.passreqerror);
+      } catch (e) {}
+      await Loadset(false);
+    } else {
+      setcaptchamessage("captcha not verified");
+      await Loadset(false);
+    }
   };
 
   function seterrors() {
@@ -37,8 +64,8 @@ export default function RegForm() {
 
   return (
     <div className="md:w-7/12 m-auto mt-10 mb-10 border-2 p-5 md:pr-20 md:pl-20 regist-form-wrapper">
-      <h1 className="font-khand text-6xl text-center">Register</h1>
-      <form onSubmit={handlesubmit} className="text-2xl font-khand font-light">
+      <h1 className="font-khand text-4xl text-center">Register</h1>
+      <form onSubmit={handlesubmit} className="text-xl font-khand font-light">
         <div className="form-field">
           <label htmlFor="email">Email:</label>
           <input
@@ -53,6 +80,9 @@ export default function RegForm() {
         <div className="form-field">
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
+          <span className="text-yellow-600 text-lg pl-1">
+            Atleast one number and one special character. 6 to 16 characters
+          </span>
           <p className="text-red-700">{passreqerror}</p>
         </div>
         <div className="form-field">
@@ -66,12 +96,15 @@ export default function RegForm() {
           <p className="text-red-700">{confirmerror}</p>
         </div>
         <div className="form-field grid sm:grid-cols-12 ">
-          <div className="sm:col-span-8 col-span-12 flex self-center">
-            <p>
-              Already have an account? <Link href="../login">Login</Link>
-            </p>
+          <div className="sm:col-span-12 col-span-12 flex self-center">
+            <p className="text-red-700">{captchamessage}</p>
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+              ref={recaptchaRef}
+              onChange={handleCaptchaSubmission}
+            />
           </div>
-          <div className="sm:col-span-4 col-span-12 justify-end flex">
+          <div className="sm:col-span-12 col-span-12 justify-end flex">
             {loading ? (
               <div>
                 <svg
@@ -97,8 +130,13 @@ export default function RegForm() {
                 <p className="text-2xl text-yellow-600">Saving....</p>
               </div>
             ) : (
-              <input type="submit" value="Submit" />
+              <input type="submit" value="Submit" className="reg-submit" />
             )}
+          </div>
+          <div className="sm:col-span-12 col-span-12 flex self-center mt-2">
+            <p>
+              Already have an account? <Link href="../login">Login</Link>
+            </p>
           </div>
         </div>
       </form>

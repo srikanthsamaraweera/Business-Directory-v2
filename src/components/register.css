@@ -23,7 +23,7 @@
 
 
 .form-field {
-    margin-bottom: 25px;
+    margin-bottom: 7px;
 }
 
 .form-field label {
@@ -36,7 +36,7 @@
     padding: 5px;
     border: 1px solid #E429A9;
     border-radius: 10px;
-    height: 45px;
+    height: 35px;
 }
 
 .form-field input[type="submit"] {
@@ -44,13 +44,16 @@
     border: 1px solid #E429A9;
     color: white;
     cursor: pointer;
-    width: 150px;
-    height: 50px;
+   /* width: 150px;*/
+   height: auto; 
+   
 }
 
 .form-field input[type="submit"]:hover {
     background-color: #09F2FF;
 }
+
+
 
 .regist-form-wrapper input:focus {
     border: 1px solid #09F2FF;
