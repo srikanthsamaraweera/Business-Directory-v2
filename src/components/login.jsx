@@ -26,11 +26,11 @@ export default function LogForm() {
 
   return (
     <div className="md:w-7/12 m-auto mt-10 mb-10 border-2 p-5 md:pr-20 md:pl-20 regist-form-wrapper">
-      <h1 className="font-khand text-6xl text-center">Login</h1>
+      <h1 className="font-khand text-4xl text-center">Login</h1>
 
       <form
         onSubmit={handlesubmit}
-        className="text-2xl font-khand font-light"
+        className="text-xl font-khand font-light"
         method="post"
       >
         <div className="form-field">
