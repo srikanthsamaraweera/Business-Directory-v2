@@ -43,6 +43,16 @@ export default function ProfileMenuButton(props) {
                 Hi {props.usermail != undefined ? props.usermail : ""}
               </p>
             </DropdownItem>
+            <DropdownItem key="new">
+              <Link href={"/useraccount"}>
+                <span className="grid-cols-2 gap-2 flex">
+                  <span className="text-xl">
+                    <FontAwesomeIcon icon={faUser} className="pink-text" />
+                  </span>
+                  <span className="text-xl">User Account</span>
+                </span>
+              </Link>
+            </DropdownItem>
             <DropdownItem>
               <LogoutButton />
             </DropdownItem>
