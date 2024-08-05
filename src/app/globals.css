@@ -33,3 +33,6 @@ body {
 .pink-text{
   color: #E429A9;
 }
+.pink-border{
+  border: 1px solid #E429A9;
+}

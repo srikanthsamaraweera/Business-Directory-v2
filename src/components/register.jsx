@@ -104,7 +104,7 @@ export default function RegForm() {
               onChange={handleCaptchaSubmission}
             />
           </div>
-          <div className="sm:col-span-12 col-span-12 justify-end flex">
+          <div className="sm:col-span-6 col-span-12 justify-start flex">
             {loading ? (
               <div>
                 <svg
@@ -133,7 +133,7 @@ export default function RegForm() {
               <input type="submit" value="Submit" className="reg-submit" />
             )}
           </div>
-          <div className="sm:col-span-12 col-span-12 flex self-center mt-2">
+          <div className="sm:col-span-6 col-span-12 flex self-center justify-end mt-2">
             <p>
               Already have an account? <Link href="../login">Login</Link>
             </p>
