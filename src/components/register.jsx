@@ -81,7 +81,7 @@ export default function RegForm() {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
           <span className="text-yellow-600 text-lg pl-1">
-            Atleast one number and one special character. 6 to 16 characters
+            Atleast one number and one special character. 6 to 20 characters
           </span>
           <p className="text-red-700">{passreqerror}</p>
         </div>
