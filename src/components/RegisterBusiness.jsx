@@ -10,10 +10,11 @@ import { verifyCaptcha } from "@/functions/validaterecaptcha";
 import SaveAd from "@/functions/SaveAd";
 import resizeImages from "@/functions/resizeImages";
 import deleteimages from "@/functions/deleteimages";
-import saveTempImage from "@/functions/tempImagesSave";
+import saveTempImage, { SetUSedInPost } from "@/functions/tempImagesSave";
 import DelTempImageFromDB from "@/functions/tempImageDelDB";
 
 const RegisterBusiness = () => {
+  //*********variables for image upload start ********
   const [file, setFile] = useState(null);
   const [file2, setFile2] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -26,6 +27,8 @@ const RegisterBusiness = () => {
 
   const [file1uploading, setfile1uploading] = useState("");
   const [file2uploading, setfile2uploading] = useState("");
+
+  //*********variables for image upload end ********
 
   const random = RandNum(1, 100000);
   const date = new Date();
@@ -53,6 +56,8 @@ const RegisterBusiness = () => {
   const RandomKeyset = () => {
     setrandomkey(RandNum(1, 10000));
   };
+
+  //**************code for image upload begins******************
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -125,6 +130,8 @@ const RegisterBusiness = () => {
     await handleupload();
     await handleupload2();
   };
+  //**********code for image upload ends**********
+
   // const savetemptodb = async () => {
   //   await saveTempImage(filename1, filename2);
   // };
@@ -142,12 +149,12 @@ const RegisterBusiness = () => {
       var result;
       SetSaving("Saving...");
       //await handleupload();
-      await handleupload2();
+      //  await handleupload2();
       console.log("urlset- ", uploadurl, " ", uploadurl2);
       setisverified("");
 
       await SaveAd(formData, uploadurl, uploadurl2);
-
+      await SetUSedInPost(filename1, filename2);
       RandomKeyset();
       SetSaving("Saved");
     }
