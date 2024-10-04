@@ -5,8 +5,12 @@ import { useState } from "react";
 
 export default function UserAccountFullPage() {
   const [menuval, setmenuval] = useState("view");
+  const [Saving, SetSaving] = useState("Register");
 
   const getmenuval = (val) => {
+    if (val === "newreg") {
+      SetSaving("Pending");
+    }
     setmenuval(val);
   };
 
@@ -15,7 +19,7 @@ export default function UserAccountFullPage() {
       case "view":
         return "view";
       case "newreg":
-        return <RegisterBusiness />;
+        return <RegisterBusiness Saving={Saving} SetSaving={SetSaving} />;
       case "edit":
         return "edit";
       case "delete":

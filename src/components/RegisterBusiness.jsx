@@ -13,7 +13,7 @@ import deleteimages from "@/functions/deleteimages";
 import saveTempImage, { SetUSedInPost } from "@/functions/tempImagesSave";
 import DelTempImageFromDB from "@/functions/tempImageDelDB";
 
-const RegisterBusiness = () => {
+const RegisterBusiness = ({ Saving, SetSaving }) => {
   //*********variables for image upload start ********
   const [file, setFile] = useState(null);
   const [file2, setFile2] = useState(null);
@@ -21,7 +21,8 @@ const RegisterBusiness = () => {
   const [uploadurl, setuploadurl] = useState("");
   const [uploadurl2, setuploadurl2] = useState("");
   const [randomkey, setrandomkey] = useState("1");
-  const [Saving, SetSaving] = useState("Register");
+  // const [Saving, SetSaving] = useState("Register");
+  // const [Saving, SetSaving] = useState("Register");
   const [filename1, setfilename1] = useState("");
   const [filename2, setfilename2] = useState("");
 
@@ -176,159 +177,185 @@ const RegisterBusiness = () => {
   };
 
   return (
-    <div className="md:w-11/12 m-auto mt-10 mb-10 border-2 p-5  regist-form-wrapper">
-      <h2 className="font-khand text-3xl text-center">Registration Form</h2>
-      <form onSubmit={handlesubmit} className="text-2xl font-khand font-light">
-        <div className="form-field form-field-narrow">
-          <label htmlFor="title">Title:</label>
-          <input type="text" id="title" name="ad_title" />
+    <div>
+      {Saving == "Saved" ? (
+        <div className="md:w-6/12 w-11/12 m-auto mt-20 mb-10 border-2 p-10 lg:pr-20 pr-10-10 lg:pl-20 pr-10 regist-form-wrapper">
+          <p className="font-khand md:text-5xl sm:text-3xl text-3xl">
+            Ad Submitted Sucessfully!
+          </p>
+          <div className="grid grid-cols-10">
+            <div className="col-span-1 self-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                  fill="#0c9000"
+                  d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                />
+              </svg>
+            </div>
+            <div className="col-span-9 self-center p-5 text-xl">
+              <p>Ad submitted for review. Will be posted after approval.</p>
+            </div>
+          </div>
         </div>
+      ) : (
+        <div className="md:w-11/12 m-auto mt-10 mb-10 border-2 p-5  regist-form-wrapper">
+          <h2 className="font-khand text-3xl text-center">Registration Form</h2>
+          <form
+            onSubmit={handlesubmit}
+            className="text-2xl font-khand font-light"
+          >
+            <div className="form-field form-field-narrow">
+              <label htmlFor="title">Title:</label>
+              <input type="text" id="title" name="ad_title" />
+            </div>
 
-        <div className="form-field form-field-narrow">
-          <label htmlFor="type">Type:</label>
-          <input type="text" id="type" name="ad_type" />
-        </div>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="type">Type:</label>
+              <input type="text" id="type" name="ad_type" />
+            </div>
 
-        <div className="form-field form-field-narrow">
-          <label htmlFor="image">Image:</label>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="image">Image:</label>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  {uploadurl || uploadurl2 ? (
+                    ""
+                  ) : (
+                    <input
+                      type="file"
+                      id="image"
+                      name="ad_image1"
+                      onChange={handleFileChange}
+                    />
+                  )}
+                </div>
+                <div>
+                  {uploadurl || uploadurl2 ? (
+                    ""
+                  ) : (
+                    <input
+                      type="file"
+                      id="image2"
+                      name="ad_image2"
+                      onChange={handleFileChange2}
+                    />
+                  )}
+                </div>
+              </div>
               {uploadurl || uploadurl2 ? (
                 ""
               ) : (
-                <input
-                  type="file"
-                  id="image"
-                  name="ad_image1"
-                  onChange={handleFileChange}
-                />
+                <button
+                  onClick={handleimageuploads}
+                  disabled={uploading}
+                  className="rounded-full pr-5 pl-5"
+                >
+                  {uploading ? "Uploading..." : "Upload"}
+                </button>
               )}
-            </div>
-            <div>
+
+              <div class="flex gap-4">
+                <div>
+                  {uploadurl ? (
+                    <>
+                      <p>{file1uploading}</p>
+                      <Image
+                        name="url1"
+                        src={uploadurl}
+                        alt="uploaded image"
+                        width={300}
+                        height={300}
+                        style={{
+                          width: "300px",
+                          height: "auto",
+                          maxHeight: "400px",
+                        }}
+                      />
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div>
+                  {uploadurl2 ? (
+                    <>
+                      <p>{file2uploading}</p>
+                      <Image
+                        name="url2"
+                        src={uploadurl2}
+                        alt="uploaded image"
+                        width={300}
+                        height={300}
+                        style={{
+                          width: "300px",
+                          height: "auto",
+                          maxHeight: "400px",
+                        }}
+                      />{" "}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
               {uploadurl || uploadurl2 ? (
-                ""
-              ) : (
-                <input
-                  type="file"
-                  id="image2"
-                  name="ad_image2"
-                  onChange={handleFileChange2}
-                />
-              )}
-            </div>
-          </div>
-          {uploadurl || uploadurl2 ? (
-            ""
-          ) : (
-            <button
-              onClick={handleimageuploads}
-              disabled={uploading}
-              className="rounded-full pr-5 pl-5"
-            >
-              {uploading ? "Uploading..." : "Upload"}
-            </button>
-          )}
-
-          <div class="flex gap-4">
-            <div>
-              {uploadurl ? (
-                <>
-                  <p>{file1uploading}</p>
-                  <Image
-                    name="url1"
-                    src={uploadurl}
-                    alt="uploaded image"
-                    width={300}
-                    height={300}
-                    style={{
-                      width: "300px",
-                      height: "auto",
-                      maxHeight: "400px",
-                    }}
-                  />
-                </>
+                <div class="grid grid-cols-4 gap-4">
+                  <button onClick={deletefile}>Change</button>
+                </div>
               ) : (
                 ""
               )}
             </div>
-            <div>
-              {uploadurl2 ? (
-                <>
-                  <p>{file2uploading}</p>
-                  <Image
-                    name="url2"
-                    src={uploadurl2}
-                    alt="uploaded image"
-                    width={300}
-                    height={300}
-                    style={{
-                      width: "300px",
-                      height: "auto",
-                      maxHeight: "400px",
-                    }}
-                  />{" "}
-                </>
-              ) : (
-                ""
-              )}
+            <div className="form-field form-field-narrow">
+              <p>{filename1}</p>
+              <p>{filename2}</p>
             </div>
-          </div>
-          {uploadurl || uploadurl2 ? (
-            <div class="grid grid-cols-4 gap-4">
-              <button onClick={deletefile}>Change</button>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="map">Map:</label>
+              <input type="text" id="map" name="ad_map" />
             </div>
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="form-field form-field-narrow">
-          <p>{filename1}</p>
-          <p>{filename2}</p>
-        </div>
-        <div className="form-field form-field-narrow">
-          <label htmlFor="map">Map:</label>
-          <input type="text" id="map" name="ad_map" />
-        </div>
 
-        <div className="form-field form-field-narrow">
-          <label htmlFor="description">Description:</label>
-          <textarea id="description" name="ad_description"></textarea>
-        </div>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="description">Description:</label>
+              <textarea id="description" name="ad_description"></textarea>
+            </div>
 
-        <div className="form-field form-field-narrow">
-          <label htmlFor="contactNumber">Contact Number:</label>
-          <input type="tel" id="contactNumber" name="ad_telephone" />
-        </div>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="contactNumber">Contact Number:</label>
+              <input type="tel" id="contactNumber" name="ad_telephone" />
+            </div>
 
-        <div className="form-field form-field-narrow">
-          <label htmlFor="contactEmail">Contact Email:</label>
-          <input type="email" id="contactEmail" name="ad_email" />
-        </div>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="contactEmail">Contact Email:</label>
+              <input type="email" id="contactEmail" name="ad_email" />
+            </div>
 
-        <div className="form-field form-field-narrow">
-          <label htmlFor="address">Address:</label>
-          <textarea id="address" name="ad_address"></textarea>
+            <div className="form-field form-field-narrow">
+              <label htmlFor="address">Address:</label>
+              <textarea id="address" name="ad_address"></textarea>
+            </div>
+            <div className="form-field form-field-narrow self-center">
+              <p className="text-red-700">{captchamessage}</p>
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                ref={recaptchaRef}
+                onChange={handleCaptchaSubmission}
+                key={randomkey}
+              />
+            </div>
+            <div className="form-field form-field-narrow">
+              <input
+                type="submit"
+                value={Saving}
+                disabled={Saving == "Saved" ? true : false}
+                className={Saving == "Saved" ? "opacity-disabled" : ""}
+              />
+              {Saving == "Saved" ? <a href="">Edit / View AD</a> : ""}
+            </div>
+          </form>
         </div>
-        <div className="form-field form-field-narrow self-center">
-          <p className="text-red-700">{captchamessage}</p>
-          <ReCAPTCHA
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-            ref={recaptchaRef}
-            onChange={handleCaptchaSubmission}
-            key={randomkey}
-          />
-        </div>
-        <div className="form-field form-field-narrow">
-          <input
-            type="submit"
-            value={Saving}
-            disabled={Saving == "Saved" ? true : false}
-            className={Saving == "Saved" ? "opacity-disabled" : ""}
-          />
-          {Saving == "Saved" ? <a href="">Edit / View AD</a> : ""}
-        </div>
-      </form>
+      )}
     </div>
   );
 };

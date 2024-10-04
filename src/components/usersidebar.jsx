@@ -29,12 +29,8 @@ export default function UserSideBar(props) {
               View
             </a>
           </li>
-          <li className=" font-khand flex">
-            <a
-              href="#"
-              className="flex"
-              onClick={() => props.getmenuval("newreg")}
-            >
+          <li className=" font-khand flex cursor-pointer">
+            <a className="flex" onClick={() => props.getmenuval("newreg")}>
               <FontAwesomeIcon className="pink-text w-7 pr-2" icon={faAdd} />
               New Registration
             </a>
