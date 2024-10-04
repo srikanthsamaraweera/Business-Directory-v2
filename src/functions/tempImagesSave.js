@@ -12,3 +12,19 @@ export default async function saveTempImage(file1) {
         }
     })
 }
+
+export async function SetUSedInPost(file1, file2) {
+    const db2 = new PrismaClient()
+    await db2.temp_image.updateMany(
+        {
+            where: {
+                filename1: {
+                    in: [file1, file2],
+                },
+            },
+            data: {
+                posted: 1,
+            },
+        }
+    )
+}
