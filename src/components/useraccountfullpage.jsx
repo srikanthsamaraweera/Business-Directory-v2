@@ -1,25 +1,39 @@
 "use client";
-import RegisterBusiness from "@/components/RegisterBusiness";
+
 import UserSideBar from "@/components/usersidebar";
 import { useState } from "react";
+import RegisterBusiness from "./useraccountpage/RegisterBusiness";
+import Viewads from "./useraccountpage/Viewads";
+import RandNum from "@/functions/generaterand";
 
 export default function UserAccountFullPage() {
   const [menuval, setmenuval] = useState("view");
   const [Saving, SetSaving] = useState("Register");
+  // const [randomno, setrandomno] = useState("1000");
 
   const getmenuval = (val) => {
     if (val === "newreg") {
-      SetSaving("Pending");
+      SetSaving("Save");
     }
     setmenuval(val);
   };
 
+  // const generateRand = async () => {
+  //   setrandomno(RandNum(1, 1000000));
+  // };
+
   function getmenu() {
     switch (menuval) {
       case "view":
-        return "view";
+        return <Viewads />;
       case "newreg":
-        return <RegisterBusiness Saving={Saving} SetSaving={SetSaving} />;
+        return (
+          <RegisterBusiness
+            Saving={Saving}
+            SetSaving={SetSaving}
+            randno={RandNum(1, 1000000)}
+          />
+        );
       case "edit":
         return "edit";
       case "delete":
