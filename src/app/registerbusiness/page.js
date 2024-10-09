@@ -1,4 +1,4 @@
-import RegisterBusiness from '@/components/RegisterBusiness'
+import RegisterBusiness from '@/components/useraccountpage/RegisterBusiness'
 
 
 export default function page() {

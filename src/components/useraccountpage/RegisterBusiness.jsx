@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
-import "./register.css";
+import "../register.css";
 import Image from "next/image";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebaseconfig";
+import { storage } from "../../../firebaseconfig";
 import RandNum from "@/functions/generaterand";
 import Resizer from "react-image-file-resizer";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -13,7 +13,7 @@ import deleteimages from "@/functions/deleteimages";
 import saveTempImage, { SetUSedInPost } from "@/functions/tempImagesSave";
 import DelTempImageFromDB from "@/functions/tempImageDelDB";
 
-const RegisterBusiness = ({ Saving, SetSaving }) => {
+const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
   //*********variables for image upload start ********
   const [file, setFile] = useState(null);
   const [file2, setFile2] = useState(null);
@@ -157,6 +157,10 @@ const RegisterBusiness = ({ Saving, SetSaving }) => {
       await SaveAd(formData, uploadurl, uploadurl2);
       await SetUSedInPost(filename1, filename2);
       RandomKeyset();
+      setuploadurl("");
+      setuploadurl2("");
+      setfilename1("");
+      setfilename2("");
       SetSaving("Saved");
     }
   };
@@ -255,7 +259,7 @@ const RegisterBusiness = ({ Saving, SetSaving }) => {
                 </button>
               )}
 
-              <div class="flex gap-4">
+              <div class="flex gap-4" key={randomkey}>
                 <div>
                   {uploadurl ? (
                     <>
@@ -307,7 +311,7 @@ const RegisterBusiness = ({ Saving, SetSaving }) => {
                 ""
               )}
             </div>
-            <div className="form-field form-field-narrow">
+            <div className="form-field form-field-narrow" key={randomkey}>
               <p>{filename1}</p>
               <p>{filename2}</p>
             </div>
