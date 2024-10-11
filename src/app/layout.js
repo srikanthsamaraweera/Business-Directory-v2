@@ -3,6 +3,7 @@ import "./globals.css";
 import TopNavigation from "../components/topnav";
 import SigninBar from "@/components/signinbar";
 import localfont from 'next/font/local';
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -45,10 +46,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
 
       <body className={`${Khand.variable} ${KhandBold.variable} ${KhandMedium.variable}`}>
+        <SessionProviderWrapper>
+          <TopNavigation />
 
-        <TopNavigation />
+          <div> {children}</div>
+        </SessionProviderWrapper>
 
-        <div> {children}</div>
 
       </body>
     </html>

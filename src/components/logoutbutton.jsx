@@ -1,10 +1,11 @@
-import LogOut from "@/functions/logout";
+"use client";
 import {
   faDoorOpen,
   faSignOut,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signOut } from "next-auth/react";
 
 export default function LogoutButton() {
   return (
@@ -18,14 +19,7 @@ export default function LogoutButton() {
     </form> */}
 
       <button
-        onClick={() => {
-          //   alert("Button clicked");
-          console.log("Before async function");
-          (async () => {
-            //  alert("Button clicked inside async function");
-            await LogOut();
-          })();
-        }}
+        onClick={() => signOut({ callbackUrl: "/" })}
         className="text-xl w-full"
       >
         <div className="flex gap-2">

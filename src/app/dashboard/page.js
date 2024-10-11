@@ -1,5 +1,6 @@
 // src/app/dashboard/page.js
-import { getServerSession } from 'next-auth/next';
+import { getServerSession } from "next-auth/next";
+
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import ClientDashboard from './ClientDashboard';
 

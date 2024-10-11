@@ -25,6 +25,7 @@ export default function UserAccountFullPage() {
   function getmenu() {
     switch (menuval) {
       case "view":
+        // return "<Viewads />";
         return <Viewads />;
       case "newreg":
         return (
@@ -33,6 +34,7 @@ export default function UserAccountFullPage() {
             SetSaving={SetSaving}
             randno={RandNum(1, 1000000)}
           />
+          //"Register business"
         );
       case "edit":
         return "edit";

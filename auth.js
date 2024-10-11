@@ -39,21 +39,33 @@ const config = {
     ], secret: process.env.NEXT_PUBLIC_SECRET,
     callbacks: {
 
-        async signIn({ user, account, profile, email, credentials }) {
+        // async signIn({ user, account, profile, email, credentials }) {
 
 
-            if (account.provider === "google") {
-                console.log("User logged in with Google");
-                console.log(user);
+        //     if (account.provider === "google") {
+        //         console.log("User logged in with Google");
+        //         console.log(user);
+        //     }
+
+        //     if (account.provider === "credentials") {
+        //         // Code to execute if the provider is "credentials"
+        //         console.log("User logged in with Credentials");
+        //         console.log(user);
+
+        //     }
+        //     return true
+        // },
+
+        async session({ session, token }) {
+            // Attach the user name to the session
+            session.user.email = token.email;
+            return session;
+        },
+        async jwt({ token, user }) {
+            if (user) {
+                token.email = user.email;
             }
-
-            if (account.provider === "credentials") {
-                // Code to execute if the provider is "credentials"
-                console.log("User logged in with Credentials");
-                console.log(user);
-
-            }
-            return true
+            return token;
         },
 
     },

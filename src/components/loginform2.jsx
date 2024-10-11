@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useState } from "react";
 import LoaderAnimation from "./loader";
 import AuthSignIn from "@/functions/authsignin";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LogForm2() {
   const [loading, setloading] = useState(false);
   const [authstat, setauthstat] = useState("");
+  const router = useRouter();
 
   const handlesubmit = async (event) => {
     event.preventDefault();
@@ -17,18 +20,32 @@ export default function LogForm2() {
     const formData = new FormData(form);
     const email = formData.get("email");
     const plainpass = formData.get("password");
-    const authresult = await AuthSignIn(email, plainpass);
-    authresult ? setauthstat(authresult.error) : setauthstat("");
-    console.log("authresult ", authresult);
+    // const authresult = await AuthSignIn(email, plainpass);
+    //  authresult ? setauthstat(authresult.error) : setauthstat("");
+    // console.log("authresult ", authresult);
     setloading(false);
     // authresult == "Invalid credentials."
     //   ? ""
     //   : router.push("/login/loginsuccess");
+
+    const result = await signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: false,
+    });
+
+    if (result.ok) {
+      console.log("logged in ");
+      router.push("/"); // Redirect to the dashboard or a protected page
+    } else {
+      console.log("login error ");
+      alert("Login failed");
+    }
   };
 
   return (
     <div className="md:w-6/12 m-auto mt-10 mb-10 border-2 p-5  regist-form-wrapper">
-      <h1 className="font-khand text-3xl text-center">Login</h1>
+      <h1 className="font-khand text-3xl text-center">Loginxx</h1>
 
       <form
         onSubmit={handlesubmit}

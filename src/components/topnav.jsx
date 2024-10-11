@@ -2,11 +2,12 @@ import Image from "next/image";
 import "./topnav.css";
 import ProfileMenuButton from "./profilemenubutton";
 
-import { auth } from "auth";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Link from "next/link";
 
 export default async function TopNavigation() {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="nav-box-shadow">
