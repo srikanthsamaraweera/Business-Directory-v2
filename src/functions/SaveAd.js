@@ -1,11 +1,12 @@
 "use server"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
-import { auth } from "auth";
+import { getServerSession } from "next-auth";
 
 
 export default async function SaveAd(formData, im1, im2) {
     const db = new PrismaClient();
-    const session = await auth();
+    const session = await getServerSession(authOptions);
     console.log("imagevals: ", im1, " ", im2)
 
     try {

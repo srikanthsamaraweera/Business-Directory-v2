@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "../register.css";
 import Image from "next/image";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -28,6 +28,7 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
 
   const [file1uploading, setfile1uploading] = useState("");
   const [file2uploading, setfile2uploading] = useState("");
+  const [bothimagesEmpty, setbothimagesEmpty] = useState(true);
 
   //*********variables for image upload end ********
 
@@ -38,6 +39,14 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
   const [isverified, setisverified] = useState("");
   const [captchamessage, setcaptchamessage] = useState("");
   const recaptchaRef = useRef(null);
+
+  useEffect(() => {
+    if (uploadurl || uploadurl2) {
+      setbothimagesEmpty(false);
+    } else {
+      setbothimagesEmpty(true);
+    }
+  }, [uploadurl, uploadurl2]); // Dependency array to watch for changes
 
   async function handleCaptchaSubmission(token) {
     setcaptchamessage("");
@@ -148,20 +157,27 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
 
     if (isverified == "success!") {
       var result;
-      SetSaving("Saving...");
+
       //await handleupload();
       //  await handleupload2();
       console.log("urlset- ", uploadurl, " ", uploadurl2);
-      setisverified("");
 
-      await SaveAd(formData, uploadurl, uploadurl2);
-      await SetUSedInPost(filename1, filename2);
-      RandomKeyset();
-      setuploadurl("");
-      setuploadurl2("");
-      setfilename1("");
-      setfilename2("");
-      SetSaving("Saved");
+      if (
+        bothimagesEmpty &&
+        confirm("Are you sure you want to save without any images") == true
+      ) {
+        setisverified("");
+        SetSaving("Saving...");
+        await SaveAd(formData, uploadurl, uploadurl2);
+        await SetUSedInPost(filename1, filename2);
+        RandomKeyset();
+        setuploadurl("");
+        setuploadurl2("");
+        setfilename1("");
+        setfilename2("");
+        SetSaving("Saved");
+      } else {
+      }
     }
   };
 
@@ -314,6 +330,9 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
             <div className="form-field form-field-narrow" key={randomkey}>
               <p>{filename1}</p>
               <p>{filename2}</p>
+            </div>
+            <div className="form-field form-field-narrow">
+              status- {String(bothimagesEmpty)}
             </div>
             <div className="form-field form-field-narrow">
               <label htmlFor="map">Map:</label>
