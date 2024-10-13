@@ -176,7 +176,17 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
         setfilename1("");
         setfilename2("");
         SetSaving("Saved");
-      } else {
+      } else if (!bothimagesEmpty) {
+        setisverified("");
+        SetSaving("Saving...");
+        await SaveAd(formData, uploadurl, uploadurl2);
+        await SetUSedInPost(filename1, filename2);
+        RandomKeyset();
+        setuploadurl("");
+        setuploadurl2("");
+        setfilename1("");
+        setfilename2("");
+        SetSaving("Saved");
       }
     }
   };
