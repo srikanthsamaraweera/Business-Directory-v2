@@ -13,6 +13,7 @@ export default async function handler(req, res) {
     const limit = parseInt(req.query.limit) || 4; // Number of records per page, defaults to 4
     const skip = (page - 1) * limit; // Calculate how many records to skip
     const userEmail = req.query.user_email;
+    const titleValue = req.query.titleval;
 
 
     if (!session) {
@@ -21,10 +22,20 @@ export default async function handler(req, res) {
 
     try {
         const totalRecords = await db.post.count({
-            where: { user_email: userEmail }
+            where: {
+                user_email: userEmail, // Exact match for user_email
+                title: {
+                    contains: titleValue,  // Partial match for title (LIKE '%titleValue%')
+                }
+            },
         }); // Get the total number of records
         const records = await db.post.findMany({
-            where: { user_email: userEmail },
+            where: {
+                user_email: userEmail, // Exact match for user_email
+                title: {
+                    contains: titleValue,  // Partial match for title (LIKE '%titleValue%')
+                }
+            },
             skip,
             take: limit,
         });
