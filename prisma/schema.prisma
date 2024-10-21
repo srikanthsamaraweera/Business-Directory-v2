@@ -27,9 +27,11 @@ model post {
   image3      String? @db.VarChar(1000)
   map         String? @db.VarChar(450)
   address     String? @db.VarChar(100)
-  users       users?  @relation(fields: [user_email], references: [email], onDelete: Cascade, map: "useremail")
+  district    String? @db.VarChar(45)
+  city        String? @db.VarChar(45)
+  users       users?  @relation(fields: [user_email], references: [email], onDelete: NoAction, onUpdate: NoAction, map: "aduser")
 
-  @@index([user_email], map: "useremail_idx")
+  @@index([user_email], map: "aduser_idx")
 }
 
 model users {
@@ -54,4 +56,9 @@ model temp_image {
   id        Int    @id @default(autoincrement())
   filename1 String @db.VarChar(200)
   posted    Int    @default(0)
+}
+
+model districts {
+  id       Int    @id @default(autoincrement())
+  district String @db.VarChar(45)
 }

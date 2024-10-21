@@ -10,6 +10,7 @@ export const authOptions = {
             credentials: {
                 email: {
                     label: "email",
+                    type: "email"
                 },
                 password: {
                     label: "Password",

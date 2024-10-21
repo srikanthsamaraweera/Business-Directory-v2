@@ -63,7 +63,7 @@ export default function ProfileMenuButton(props) {
             className="font-khand text-3xl"
           >
             <DropdownItem key="new">
-              <Link href={"/api/auth/signin"}>
+              <Link href={"/login"}>
                 <span className="grid-cols-2 gap-2 flex">
                   <span className="text-xl">
                     <svg

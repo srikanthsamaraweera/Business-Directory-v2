@@ -12,6 +12,7 @@ import resizeImages from "@/functions/resizeImages";
 import deleteimages from "@/functions/deleteimages";
 import saveTempImage, { SetUSedInPost } from "@/functions/tempImagesSave";
 import DelTempImageFromDB from "@/functions/tempImageDelDB";
+import citylist from "./cities";
 
 const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
   //*********variables for image upload start ********
@@ -39,6 +40,263 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
   const [isverified, setisverified] = useState("");
   const [captchamessage, setcaptchamessage] = useState("");
   const recaptchaRef = useRef(null);
+
+  console.log("cities list - ", JSON.stringify(citylist));
+
+  // List of districts and their corresponding cities
+  const districtsAndCities = citylist;
+  // const districtsAndCities = {
+  //   Ampara: [
+  //     "Ampara",
+  //     "Kalmunai",
+  //     "Akkaraipattu",
+  //     "Sainthamaruthu",
+  //     "Sammanthurai",
+  //     "Dehiattakandiya",
+  //     "Uhana",
+  //     "Pottuvil",
+  //     "Thirukkovil",
+  //     "Mahaoya",
+  //   ],
+  //   Anuradhapura: [
+  //     "Anuradhapura",
+  //     "Kekirawa",
+  //     "Medawachchiya",
+  //     "Thambuttegama",
+  //     "Eppawala",
+  //     "Mihintale",
+  //     "Nochchiyagama",
+  //     "Padaviya",
+  //     "Horowpothana",
+  //     "Rambewa",
+  //   ],
+  //   Badulla: [
+  //     "Badulla",
+  //     "Bandarawela",
+  //     "Haputale",
+  //     "Ella",
+  //     "Mahiyanganaya",
+  //     "Welimada",
+  //     "Passara",
+  //     "Hali-Ela",
+  //     "Diyatalawa",
+  //     "Meegahakiula",
+  //   ],
+  //   Batticaloa: [
+  //     "Batticaloa",
+  //     "Kattankudy",
+  //     "Valachchenai",
+  //     "Eravur",
+  //     "Kaluwanchikudy",
+  //     "Vavunathivu",
+  //     "Arayampathy",
+  //     "Kalkudah",
+  //   ],
+  //   Colombo: [
+  //     "Colombo",
+  //     "Dehiwala-Mount Lavinia",
+  //     "Moratuwa",
+  //     "Maharagama",
+  //     "Kesbewa",
+  //     "Kaduwela",
+  //     "Homagama",
+  //     "Nugegoda",
+  //     "Sri Jayawardenepura Kotte",
+  //   ],
+  //   Galle: [
+  //     "Galle",
+  //     "Hikkaduwa",
+  //     "Ambalangoda",
+  //     "Weligama",
+  //     "Unawatuna",
+  //     "Karapitiya",
+  //     "Elpitiya",
+  //     "Ahangama",
+  //   ],
+  //   Gampaha: [
+  //     "Gampaha",
+  //     "Negombo",
+  //     "Kelaniya",
+  //     "Ragama",
+  //     "Wattala",
+  //     "Ja-Ela",
+  //     "Minuwangoda",
+  //     "Divulapitiya",
+  //     "Mirigama",
+  //     "Nittambuwa",
+  //   ],
+  //   Hambantota: [
+  //     "Hambantota",
+  //     "Tangalle",
+  //     "Tissamaharama",
+  //     "Beliatta",
+  //     "Kataragama",
+  //     "Sooriyawewa",
+  //     "Weeraketiya",
+  //     "Ambalantota",
+  //     "Walasmulla",
+  //   ],
+  //   Jaffna: [
+  //     "Jaffna",
+  //     "Nallur",
+  //     "Point Pedro",
+  //     "Chavakachcheri",
+  //     "Velanai",
+  //     "Karainagar",
+  //     "Kodikamam",
+  //     "Kankesanthurai",
+  //     "Delft",
+  //   ],
+  //   Kalutara: [
+  //     "Kalutara",
+  //     "Panadura",
+  //     "Horana",
+  //     "Beruwala",
+  //     "Wadduwa",
+  //     "Matugama",
+  //     "Aluthgama",
+  //     "Agalawatta",
+  //     "Bandaragama",
+  //   ],
+  //   Kandy: [
+  //     "Kandy",
+  //     "Gampola",
+  //     "Nawalapitiya",
+  //     "Peradeniya",
+  //     "Katugastota",
+  //     "Digana",
+  //     "Pilimathalawa",
+  //     "Galaha",
+  //     "Kadugannawa",
+  //   ],
+  //   Kegalle: [
+  //     "Kegalle",
+  //     "Mawanella",
+  //     "Rambukkana",
+  //     "Warakapola",
+  //     "Bulathkohupitiya",
+  //     "Deraniyagala",
+  //     "Yatiyanthota",
+  //     "Aranayake",
+  //   ],
+  //   Kilinochchi: [
+  //     "Kilinochchi",
+  //     "Poonakary",
+  //     "Paranthan",
+  //     "Kandawalai",
+  //     "Karachchi",
+  //   ],
+  //   Kurunegala: [
+  //     "Kurunegala",
+  //     "Kuliyapitiya",
+  //     "Wariyapola",
+  //     "Maho",
+  //     "Narammala",
+  //     "Pannala",
+  //     "Polgahawela",
+  //     "Alawwa",
+  //     "Mawathagama",
+  //   ],
+  //   Mannar: ["Mannar", "Murunkan", "Thalaimannar", "Pesalai"],
+  //   Matale: [
+  //     "Matale",
+  //     "Dambulla",
+  //     "Sigiriya",
+  //     "Galewela",
+  //     "Ukuwela",
+  //     "Rattota",
+  //     "Pallepola",
+  //   ],
+  //   Matara: [
+  //     "Matara",
+  //     "Weligama",
+  //     "Dickwella",
+  //     "Hakmana",
+  //     "Devinuwara",
+  //     "Akuressa",
+  //     "Kamburupitiya",
+  //     "Mirissa",
+  //   ],
+  //   Monaragala: [
+  //     "Monaragala",
+  //     "Wellawaya",
+  //     "Bibile",
+  //     "Buttala",
+  //     "Kataragama",
+  //     "Siyambalanduwa",
+  //     "Medagama",
+  //     "Tanamalwila",
+  //   ],
+  //   Mullaitivu: [
+  //     "Mullaitivu",
+  //     "Puthukudiyiruppu",
+  //     "Oddusuddan",
+  //     "Maritimepattu",
+  //     "Thunukkai",
+  //   ],
+  //   "Nuwara Eliya": [
+  //     "Nuwara Eliya",
+  //     "Hatton",
+  //     "Talawakelle",
+  //     "Ginigathena",
+  //     "Ramboda",
+  //     "Nanu Oya",
+  //     "Pundaluoya",
+  //   ],
+  //   Polonnaruwa: [
+  //     "Polonnaruwa",
+  //     "Hingurakgoda",
+  //     "Medirigiriya",
+  //     "Kaduruwela",
+  //     "Dimbulagala",
+  //     "Welikanda",
+  //   ],
+  //   Puttalam: [
+  //     "Puttalam",
+  //     "Chilaw",
+  //     "Wennappuwa",
+  //     "Mundel",
+  //     "Anamaduwa",
+  //     "Nattandiya",
+  //     "Dankotuwa",
+  //     "Kalpitiya",
+  //   ],
+  //   Ratnapura: [
+  //     "Ratnapura",
+  //     "Embilipitiya",
+  //     "Balangoda",
+  //     "Kuruwita",
+  //     "Kahawatta",
+  //     "Pelmadulla",
+  //     "Godakawela",
+  //     "Opanayake",
+  //   ],
+  //   Trincomalee: [
+  //     "Trincomalee",
+  //     "Kinniya",
+  //     "Mutur",
+  //     "Kantale",
+  //     "Seruwila",
+  //     "China Bay",
+  //     "Nilaveli",
+  //   ],
+  //   Vavuniya: ["Vavuniya", "Nedunkeni", "Vavuniya South", "Cheddikulam"],
+  // };
+
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [cities, setCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
+
+  const handleDistrictChange = (event) => {
+    const district = event.target.value;
+    setSelectedDistrict(district);
+    setCities(districtsAndCities[district] || []);
+    setSelectedCity(""); // Reset city when district changes
+  };
+
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+  };
 
   useEffect(() => {
     if (uploadurl || uploadurl2) {
@@ -341,9 +599,7 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
               <p>{filename1}</p>
               <p>{filename2}</p>
             </div>
-            <div className="form-field form-field-narrow">
-              status- {String(bothimagesEmpty)}
-            </div>
+
             <div className="form-field form-field-narrow">
               <label htmlFor="map">Map:</label>
               <input type="text" id="map" name="ad_map" />
@@ -368,6 +624,46 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
               <label htmlFor="address">Address:</label>
               <textarea id="address" name="ad_address"></textarea>
             </div>
+
+            <div className="grid grid-cols-2">
+              <div className="form-field form-field-narrow">
+                <label htmlFor="district">District:</label>
+                <select
+                  id="district"
+                  name="ad_district"
+                  value={selectedDistrict}
+                  onChange={handleDistrictChange}
+                  required
+                >
+                  <option value="">Select District</option>
+                  {Object.keys(districtsAndCities).map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-field form-field-narrow">
+                <label htmlFor="city">City:</label>
+                <select
+                  id="city"
+                  name="ad_city"
+                  value={selectedCity}
+                  onChange={handleCityChange}
+                  required
+                  disabled={!selectedDistrict}
+                >
+                  <option value="">Select City</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <div className="form-field form-field-narrow self-center">
               <p className="text-red-700">{captchamessage}</p>
               <ReCAPTCHA
