@@ -1,0 +1,9 @@
+.pink-bg{
+    background-color: #E429A9;
+}
+.pink-border:focus{
+    border-width: 1px;
+    border-color: #E429A9;
+}
+
+

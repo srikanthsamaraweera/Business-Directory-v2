@@ -24,6 +24,7 @@ export default async function SaveAd(formData, im1, im2) {
                 map: formData.get('ad_map'),
                 district: formData.get('ad_district'),
                 city: formData.get("ad_city"),
+                date: new Date(),
 
 
             },

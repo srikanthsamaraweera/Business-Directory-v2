@@ -38,6 +38,9 @@ export default async function handler(req, res) {
             },
             skip,
             take: limit,
+            orderBy: {
+                date: 'desc', // Replace 'createdAt' with the desired field to sort by
+            },
         });
 
         res.status(200).json({

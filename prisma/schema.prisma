@@ -14,22 +14,23 @@ model categories {
 }
 
 model post {
-  id          Int     @id @default(autoincrement())
-  user_email  String? @db.VarChar(100)
-  enabled     String  @default("NO") @db.VarChar(45)
-  email       String  @db.VarChar(100)
-  title       String  @db.VarChar(100)
-  description String? @db.VarChar(1000)
-  category    String  @default("Uncategorized") @db.VarChar(45)
-  phone       String? @db.VarChar(20)
-  image1      String? @db.VarChar(1000)
-  image2      String? @db.VarChar(1000)
-  image3      String? @db.VarChar(1000)
-  map         String? @db.VarChar(450)
-  address     String? @db.VarChar(100)
-  district    String? @db.VarChar(45)
-  city        String? @db.VarChar(45)
-  users       users?  @relation(fields: [user_email], references: [email], onDelete: NoAction, onUpdate: NoAction, map: "aduser")
+  id          Int       @id @default(autoincrement())
+  user_email  String?   @db.VarChar(100)
+  enabled     String    @default("NO") @db.VarChar(45)
+  email       String    @db.VarChar(100)
+  title       String    @db.VarChar(100)
+  description String?   @db.VarChar(1000)
+  category    String    @default("Uncategorized") @db.VarChar(45)
+  phone       String?   @db.VarChar(20)
+  image1      String?   @db.VarChar(1000)
+  image2      String?   @db.VarChar(1000)
+  image3      String?   @db.VarChar(1000)
+  map         String?   @db.VarChar(450)
+  address     String?   @db.VarChar(100)
+  district    String?   @db.VarChar(45)
+  city        String?   @db.VarChar(45)
+  date        DateTime? @db.DateTime(0)
+  users       users?    @relation(fields: [user_email], references: [email], onDelete: NoAction, onUpdate: NoAction, map: "aduser")
 
   @@index([user_email], map: "aduser_idx")
 }
@@ -38,6 +39,7 @@ model users {
   id              Int               @id @default(autoincrement())
   email           String            @unique(map: "email_UNIQUE") @db.VarChar(100)
   password        String            @db.VarChar(450)
+  user_type       String?           @default("user") @db.VarChar(45)
   post            post[]
   user_validation user_validation[]
 }
