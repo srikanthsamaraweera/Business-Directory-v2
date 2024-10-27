@@ -4,10 +4,10 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 
-export default async function SaveAd(formData, im1, im2) {
+export default async function SaveAd(formData, im1, im2, file1, file2) {
     const db = new PrismaClient();
     const session = await getServerSession(authOptions);
-    console.log("useremail: ", JSON.stringify(session.user.email))
+    console.log("imageurl: ", file1)
 
     try {
         await db.post.create({
@@ -25,6 +25,8 @@ export default async function SaveAd(formData, im1, im2) {
                 district: formData.get('ad_district'),
                 city: formData.get("ad_city"),
                 date: new Date(),
+                filename1: file1,
+                filename2: file2,
 
 
             },

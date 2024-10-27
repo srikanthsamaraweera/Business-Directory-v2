@@ -16,26 +16,41 @@ import citylist from "./cities";
 
 const EditBusiness = ({
   Saving,
+
   SetSaving,
+
   randno,
+
   title,
+
   type,
+
   image1,
+
   image2,
+
   map,
+
   description,
+
   contact_number,
+
   contact_email,
+
   address,
-  district,
-  city,
+
+  addistrict,
+
+  adcity,
+  simplefilename1,
+  simplefilename2,
 }) => {
   //*********variables for image upload start ********
   const [file, setFile] = useState(null);
   const [file2, setFile2] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadurl, setuploadurl] = useState("");
-  const [uploadurl2, setuploadurl2] = useState("");
+  const [uploadurl, setuploadurl] = useState(image1);
+  const [uploadurl2, setuploadurl2] = useState(image2);
   const [randomkey, setrandomkey] = useState("1");
   // const [Saving, SetSaving] = useState("Register");
   // const [Saving, SetSaving] = useState("Register");
@@ -56,247 +71,10 @@ const EditBusiness = ({
   const [captchamessage, setcaptchamessage] = useState("");
   const recaptchaRef = useRef(null);
 
-  console.log("cities list - ", JSON.stringify(citylist));
+  // console.log("cities list - ", JSON.stringify(citylist));
 
   // List of districts and their corresponding cities
   const districtsAndCities = citylist;
-  // const districtsAndCities = {
-  //   Ampara: [
-  //     "Ampara",
-  //     "Kalmunai",
-  //     "Akkaraipattu",
-  //     "Sainthamaruthu",
-  //     "Sammanthurai",
-  //     "Dehiattakandiya",
-  //     "Uhana",
-  //     "Pottuvil",
-  //     "Thirukkovil",
-  //     "Mahaoya",
-  //   ],
-  //   Anuradhapura: [
-  //     "Anuradhapura",
-  //     "Kekirawa",
-  //     "Medawachchiya",
-  //     "Thambuttegama",
-  //     "Eppawala",
-  //     "Mihintale",
-  //     "Nochchiyagama",
-  //     "Padaviya",
-  //     "Horowpothana",
-  //     "Rambewa",
-  //   ],
-  //   Badulla: [
-  //     "Badulla",
-  //     "Bandarawela",
-  //     "Haputale",
-  //     "Ella",
-  //     "Mahiyanganaya",
-  //     "Welimada",
-  //     "Passara",
-  //     "Hali-Ela",
-  //     "Diyatalawa",
-  //     "Meegahakiula",
-  //   ],
-  //   Batticaloa: [
-  //     "Batticaloa",
-  //     "Kattankudy",
-  //     "Valachchenai",
-  //     "Eravur",
-  //     "Kaluwanchikudy",
-  //     "Vavunathivu",
-  //     "Arayampathy",
-  //     "Kalkudah",
-  //   ],
-  //   Colombo: [
-  //     "Colombo",
-  //     "Dehiwala-Mount Lavinia",
-  //     "Moratuwa",
-  //     "Maharagama",
-  //     "Kesbewa",
-  //     "Kaduwela",
-  //     "Homagama",
-  //     "Nugegoda",
-  //     "Sri Jayawardenepura Kotte",
-  //   ],
-  //   Galle: [
-  //     "Galle",
-  //     "Hikkaduwa",
-  //     "Ambalangoda",
-  //     "Weligama",
-  //     "Unawatuna",
-  //     "Karapitiya",
-  //     "Elpitiya",
-  //     "Ahangama",
-  //   ],
-  //   Gampaha: [
-  //     "Gampaha",
-  //     "Negombo",
-  //     "Kelaniya",
-  //     "Ragama",
-  //     "Wattala",
-  //     "Ja-Ela",
-  //     "Minuwangoda",
-  //     "Divulapitiya",
-  //     "Mirigama",
-  //     "Nittambuwa",
-  //   ],
-  //   Hambantota: [
-  //     "Hambantota",
-  //     "Tangalle",
-  //     "Tissamaharama",
-  //     "Beliatta",
-  //     "Kataragama",
-  //     "Sooriyawewa",
-  //     "Weeraketiya",
-  //     "Ambalantota",
-  //     "Walasmulla",
-  //   ],
-  //   Jaffna: [
-  //     "Jaffna",
-  //     "Nallur",
-  //     "Point Pedro",
-  //     "Chavakachcheri",
-  //     "Velanai",
-  //     "Karainagar",
-  //     "Kodikamam",
-  //     "Kankesanthurai",
-  //     "Delft",
-  //   ],
-  //   Kalutara: [
-  //     "Kalutara",
-  //     "Panadura",
-  //     "Horana",
-  //     "Beruwala",
-  //     "Wadduwa",
-  //     "Matugama",
-  //     "Aluthgama",
-  //     "Agalawatta",
-  //     "Bandaragama",
-  //   ],
-  //   Kandy: [
-  //     "Kandy",
-  //     "Gampola",
-  //     "Nawalapitiya",
-  //     "Peradeniya",
-  //     "Katugastota",
-  //     "Digana",
-  //     "Pilimathalawa",
-  //     "Galaha",
-  //     "Kadugannawa",
-  //   ],
-  //   Kegalle: [
-  //     "Kegalle",
-  //     "Mawanella",
-  //     "Rambukkana",
-  //     "Warakapola",
-  //     "Bulathkohupitiya",
-  //     "Deraniyagala",
-  //     "Yatiyanthota",
-  //     "Aranayake",
-  //   ],
-  //   Kilinochchi: [
-  //     "Kilinochchi",
-  //     "Poonakary",
-  //     "Paranthan",
-  //     "Kandawalai",
-  //     "Karachchi",
-  //   ],
-  //   Kurunegala: [
-  //     "Kurunegala",
-  //     "Kuliyapitiya",
-  //     "Wariyapola",
-  //     "Maho",
-  //     "Narammala",
-  //     "Pannala",
-  //     "Polgahawela",
-  //     "Alawwa",
-  //     "Mawathagama",
-  //   ],
-  //   Mannar: ["Mannar", "Murunkan", "Thalaimannar", "Pesalai"],
-  //   Matale: [
-  //     "Matale",
-  //     "Dambulla",
-  //     "Sigiriya",
-  //     "Galewela",
-  //     "Ukuwela",
-  //     "Rattota",
-  //     "Pallepola",
-  //   ],
-  //   Matara: [
-  //     "Matara",
-  //     "Weligama",
-  //     "Dickwella",
-  //     "Hakmana",
-  //     "Devinuwara",
-  //     "Akuressa",
-  //     "Kamburupitiya",
-  //     "Mirissa",
-  //   ],
-  //   Monaragala: [
-  //     "Monaragala",
-  //     "Wellawaya",
-  //     "Bibile",
-  //     "Buttala",
-  //     "Kataragama",
-  //     "Siyambalanduwa",
-  //     "Medagama",
-  //     "Tanamalwila",
-  //   ],
-  //   Mullaitivu: [
-  //     "Mullaitivu",
-  //     "Puthukudiyiruppu",
-  //     "Oddusuddan",
-  //     "Maritimepattu",
-  //     "Thunukkai",
-  //   ],
-  //   "Nuwara Eliya": [
-  //     "Nuwara Eliya",
-  //     "Hatton",
-  //     "Talawakelle",
-  //     "Ginigathena",
-  //     "Ramboda",
-  //     "Nanu Oya",
-  //     "Pundaluoya",
-  //   ],
-  //   Polonnaruwa: [
-  //     "Polonnaruwa",
-  //     "Hingurakgoda",
-  //     "Medirigiriya",
-  //     "Kaduruwela",
-  //     "Dimbulagala",
-  //     "Welikanda",
-  //   ],
-  //   Puttalam: [
-  //     "Puttalam",
-  //     "Chilaw",
-  //     "Wennappuwa",
-  //     "Mundel",
-  //     "Anamaduwa",
-  //     "Nattandiya",
-  //     "Dankotuwa",
-  //     "Kalpitiya",
-  //   ],
-  //   Ratnapura: [
-  //     "Ratnapura",
-  //     "Embilipitiya",
-  //     "Balangoda",
-  //     "Kuruwita",
-  //     "Kahawatta",
-  //     "Pelmadulla",
-  //     "Godakawela",
-  //     "Opanayake",
-  //   ],
-  //   Trincomalee: [
-  //     "Trincomalee",
-  //     "Kinniya",
-  //     "Mutur",
-  //     "Kantale",
-  //     "Seruwila",
-  //     "China Bay",
-  //     "Nilaveli",
-  //   ],
-  //   Vavuniya: ["Vavuniya", "Nedunkeni", "Vavuniya South", "Cheddikulam"],
-  // };
 
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [cities, setCities] = useState([]);
@@ -306,7 +84,7 @@ const EditBusiness = ({
     const district = event.target.value;
     setSelectedDistrict(district);
     setCities(districtsAndCities[district] || []);
-    setSelectedCity(""); // Reset city when district changes
+    setSelectedCity(districtsAndCities[district][0]); // Reset city when district changes
   };
 
   const handleCityChange = (event) => {
@@ -472,6 +250,9 @@ const EditBusiness = ({
   };
 
   const deletefile = async () => {
+    setfilename1(simplefilename1);
+    setfilename2(simplefilename2);
+    console.log("delete - ", filename1);
     await deleteimages(`BDImages/${filename1}`);
     await deleteimages(`BDImages/${filename2}`);
     await DelTempImageFromDB(filename1);
@@ -509,12 +290,12 @@ const EditBusiness = ({
           >
             <div className="form-field form-field-narrow">
               <label htmlFor="title">Title:</label>
-              <input type="text" id="title" name="ad_title" />
+              <input type="text" id="title" name="ad_title" value={title} />
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="type">Type:</label>
-              <input type="text" id="type" name="ad_type" />
+              <input type="text" id="type" name="ad_type" value={type} />
             </div>
 
             <div className="form-field form-field-narrow">
@@ -611,33 +392,51 @@ const EditBusiness = ({
               )}
             </div>
             <div className="form-field form-field-narrow" key={randomkey}>
-              <p>{filename1}</p>
-              <p>{filename2}</p>
+              <p>file1 {simplefilename1}</p>
+              <p>file2 {simplefilename2}</p>
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="map">Map:</label>
-              <input type="text" id="map" name="ad_map" />
+              <input type="text" id="map" name="ad_map" value={map} />
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="description">Description:</label>
-              <textarea id="description" name="ad_description"></textarea>
+              <textarea
+                id="description"
+                name="ad_description"
+                value={description}
+              ></textarea>
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="contactNumber">Contact Number:</label>
-              <input type="tel" id="contactNumber" name="ad_telephone" />
+              <input
+                type="tel"
+                id="contactNumber"
+                name="ad_telephone"
+                value={contact_number}
+              />
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="contactEmail">Contact Email:</label>
-              <input type="email" id="contactEmail" name="ad_email" />
+              <input
+                type="email"
+                id="contactEmail"
+                name="ad_email"
+                value={contact_email}
+              />
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="address">Address:</label>
-              <textarea id="address" name="ad_address"></textarea>
+              <textarea
+                id="address"
+                name="ad_address"
+                value={address}
+              ></textarea>
             </div>
 
             <div className="grid grid-cols-2">
@@ -650,7 +449,7 @@ const EditBusiness = ({
                   onChange={handleDistrictChange}
                   required
                 >
-                  <option value="">Select District</option>
+                  <option value={addistrict}>{addistrict}</option>
                   {Object.keys(districtsAndCities).map((district) => (
                     <option key={district} value={district}>
                       {district}
@@ -667,9 +466,9 @@ const EditBusiness = ({
                   value={selectedCity}
                   onChange={handleCityChange}
                   required
-                  disabled={!selectedDistrict}
+                  // disabled={!selectedDistrict}
                 >
-                  <option value="">Select City</option>
+                  <option value={adcity}>{adcity}</option>
                   {cities.map((city) => (
                     <option key={city} value={city}>
                       {city}

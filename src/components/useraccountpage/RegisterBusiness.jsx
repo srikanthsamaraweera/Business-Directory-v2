@@ -41,7 +41,7 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
   const [captchamessage, setcaptchamessage] = useState("");
   const recaptchaRef = useRef(null);
 
-  console.log("cities list - ", JSON.stringify(citylist));
+  //console.log("cities list - ", JSON.stringify(citylist));
 
   // List of districts and their corresponding cities
   const districtsAndCities = citylist;
@@ -426,7 +426,8 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
       ) {
         setisverified("");
         SetSaving("Saving...");
-        await SaveAd(formData, uploadurl, uploadurl2);
+        console.log("image top code - ", filename1);
+        await SaveAd(formData, uploadurl, uploadurl2, filename1, filename2);
         await SetUSedInPost(filename1, filename2);
         RandomKeyset();
         setuploadurl("");
@@ -437,7 +438,7 @@ const RegisterBusiness = ({ Saving, SetSaving, randno }) => {
       } else if (!bothimagesEmpty) {
         setisverified("");
         SetSaving("Saving...");
-        await SaveAd(formData, uploadurl, uploadurl2);
+        await SaveAd(formData, uploadurl, uploadurl2, filename1, filename2);
         await SetUSedInPost(filename1, filename2);
         RandomKeyset();
         setuploadurl("");
