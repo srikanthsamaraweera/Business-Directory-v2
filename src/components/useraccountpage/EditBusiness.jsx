@@ -7,17 +7,20 @@ import RandNum from "@/functions/generaterand";
 import Resizer from "react-image-file-resizer";
 import ReCAPTCHA from "react-google-recaptcha";
 import { verifyCaptcha } from "@/functions/validaterecaptcha";
-import SaveAd from "@/functions/SaveAd";
-import resizeImages from "@/functions/resizeImages";
 import deleteimages from "@/functions/deleteimages";
 import saveTempImage, { SetUSedInPost } from "@/functions/tempImagesSave";
 import DelTempImageFromDB from "@/functions/tempImageDelDB";
 import citylist from "./cities";
+import EditAd from "@/functions/EditAd";
+import { Button } from "@nextui-org/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const EditBusiness = ({
-  Saving,
+  id,
+  // Saving,
 
-  SetSaving,
+  // SetSaving,
 
   randno,
 
@@ -44,6 +47,7 @@ const EditBusiness = ({
   adcity,
   simplefilename1,
   simplefilename2,
+  onBack,
 }) => {
   //*********variables for image upload start ********
   const [file, setFile] = useState(null);
@@ -79,6 +83,7 @@ const EditBusiness = ({
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
+  const [saved, setSavingx] = useState("");
 
   const handleDistrictChange = (event) => {
     const district = event.target.value;
@@ -219,25 +224,25 @@ const EditBusiness = ({
       ) {
         setisverified("");
         SetSaving("Saving...");
-        await SaveAd(formData, uploadurl, uploadurl2);
+        await EditAd(formData, uploadurl, uploadurl2, filename1, filename2, id);
         await SetUSedInPost(filename1, filename2);
         RandomKeyset();
         setuploadurl("");
         setuploadurl2("");
         setfilename1("");
         setfilename2("");
-        SetSaving("Saved");
+        setSavingx("saved");
       } else if (!bothimagesEmpty) {
         setisverified("");
-        SetSaving("Saving...");
-        await SaveAd(formData, uploadurl, uploadurl2);
+        //SetSaving("Saving...");
+        await EditAd(formData, uploadurl, uploadurl2, filename1, filename2, id);
         await SetUSedInPost(filename1, filename2);
         RandomKeyset();
         setuploadurl("");
         setuploadurl2("");
         setfilename1("");
         setfilename2("");
-        SetSaving("Saved");
+        setSavingx("saved");
       }
     }
   };
@@ -260,10 +265,44 @@ const EditBusiness = ({
     await seturls();
   };
 
+  // Initialize state variables for each form field
+  const [adTitle, setAdTitle] = useState(title);
+  const [adType, setAdType] = useState(type);
+  const [adMap, setAdMap] = useState(map);
+  const [adDescription, setAdDescription] = useState(description);
+  const [adTelephone, setAdTelephone] = useState(contact_number);
+  const [adEmail, setAdEmail] = useState(contact_email);
+  const [adAddress, setAdAddress] = useState(address);
+  const [fimage1, setfimage1] = useState(image1);
+  const [fimage2, setfimage2] = useState(image2);
+  const [simplefname1, setsimplefname1] = useState(simplefilename1);
+  const [simplefname2, setsimplefname2] = useState(simplefilename2);
+
+  const handleInputChange = (setFunction) => (event) =>
+    setFunction(event.target.value);
+
+  // Load initial values from props on component mount
+  useEffect(() => {
+    setAdTitle(title);
+    setAdType(type);
+    setAdMap(map);
+    setAdDescription(description);
+    setAdTelephone(contact_number);
+    setAdEmail(contact_email);
+    setAdAddress(address);
+  }, [title, type, map, description, contact_number, contact_email, address]);
+
   return (
     <div>
-      {Saving == "Saved" ? (
-        <div className="md:w-6/12 w-11/12 m-auto mt-20 mb-10 border-2 p-10 lg:pr-20 pr-10-10 lg:pl-20 pr-10 regist-form-wrapper">
+      {saved === "saved" ? (
+        <div className="md:w-6/12 w-11/12 m-auto mt-20 mb-10 border-2 p-10 lg:pr-20 pr-10-10 lg:pl-20 pr-10 regist-form-wrapper relative">
+          <FontAwesomeIcon
+            className="cursor-pointer absolute right-4 size-5 top-4 hover:opacity-50"
+            icon={faCircleXmark}
+            onClick={() => {
+              onBack();
+            }}
+          ></FontAwesomeIcon>
           <p className="font-khand md:text-5xl sm:text-3xl text-3xl">
             Ad Submitted Sucessfully!
           </p>
@@ -282,20 +321,44 @@ const EditBusiness = ({
           </div>
         </div>
       ) : (
-        <div className="md:w-11/12 m-auto mt-10 mb-10 border-2 p-5  regist-form-wrapper">
-          <h2 className="font-khand text-3xl text-center">Registration Form</h2>
+        <div className="md:w-11/12 m-auto mt-10 mb-10 border-2 p-5  regist-form-wrapper relative">
+          <FontAwesomeIcon
+            className="cursor-pointer absolute right-4 size-5 hover:opacity-50"
+            icon={faCircleXmark}
+            onClick={() => {
+              onBack();
+            }}
+          ></FontAwesomeIcon>
+
+          <h2 className="font-khand text-3xl text-center">Edit Business</h2>
           <form
             onSubmit={handlesubmit}
             className="text-2xl font-khand font-light"
           >
             <div className="form-field form-field-narrow">
+              <label htmlFor="title">ID:</label>
+              <input type="text" id="adid" name="ad_id" value={id} readOnly />
+            </div>
+            <div className="form-field form-field-narrow">
               <label htmlFor="title">Title:</label>
-              <input type="text" id="title" name="ad_title" value={title} />
+              <input
+                type="text"
+                id="title"
+                name="ad_title"
+                value={adTitle}
+                onChange={handleInputChange(setAdTitle)}
+              />
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="type">Type:</label>
-              <input type="text" id="type" name="ad_type" value={type} />
+              <input
+                type="text"
+                id="type"
+                name="ad_type"
+                value={adType}
+                onChange={handleInputChange(setAdType)}
+              />
             </div>
 
             <div className="form-field form-field-narrow">
@@ -346,7 +409,7 @@ const EditBusiness = ({
                       <p>{file1uploading}</p>
                       <Image
                         name="url1"
-                        src={uploadurl}
+                        src={fimage1}
                         alt="uploaded image"
                         width={300}
                         height={300}
@@ -367,7 +430,7 @@ const EditBusiness = ({
                       <p>{file2uploading}</p>
                       <Image
                         name="url2"
-                        src={uploadurl2}
+                        src={fimage2}
                         alt="uploaded image"
                         width={300}
                         height={300}
@@ -392,13 +455,19 @@ const EditBusiness = ({
               )}
             </div>
             <div className="form-field form-field-narrow" key={randomkey}>
-              <p>file1 {simplefilename1}</p>
-              <p>file2 {simplefilename2}</p>
+              <p>file1 {simplefname1}</p>
+              <p>file2 {simplefname2}</p>
             </div>
 
             <div className="form-field form-field-narrow">
               <label htmlFor="map">Map:</label>
-              <input type="text" id="map" name="ad_map" value={map} />
+              <input
+                type="text"
+                id="map"
+                name="ad_map"
+                value={adMap}
+                onChange={handleInputChange(setAdMap)}
+              />
             </div>
 
             <div className="form-field form-field-narrow">
@@ -406,7 +475,8 @@ const EditBusiness = ({
               <textarea
                 id="description"
                 name="ad_description"
-                value={description}
+                value={adDescription}
+                onChange={handleInputChange(setAdDescription)}
               ></textarea>
             </div>
 
@@ -416,7 +486,8 @@ const EditBusiness = ({
                 type="tel"
                 id="contactNumber"
                 name="ad_telephone"
-                value={contact_number}
+                value={adTelephone}
+                onChange={handleInputChange(setAdTelephone)}
               />
             </div>
 
@@ -426,7 +497,8 @@ const EditBusiness = ({
                 type="email"
                 id="contactEmail"
                 name="ad_email"
-                value={contact_email}
+                value={adEmail}
+                onChange={handleInputChange(setAdEmail)}
               />
             </div>
 
@@ -435,7 +507,8 @@ const EditBusiness = ({
               <textarea
                 id="address"
                 name="ad_address"
-                value={address}
+                value={adAddress}
+                onChange={handleInputChange(setAdAddress)}
               ></textarea>
             </div>
 
@@ -490,11 +563,11 @@ const EditBusiness = ({
             <div className="form-field form-field-narrow">
               <input
                 type="submit"
-                value={Saving}
-                disabled={Saving == "Saved" ? true : false}
-                className={Saving == "Saved" ? "opacity-disabled" : ""}
+                value={"Save"}
+                // disabled={Saved ? true : false}
+                // className={Saved ? "opacity-disabled" : ""}
               />
-              {Saving == "Saved" ? <a href="">Edit / View AD</a> : ""}
+              {/* {Saved ? <a href="">Edit / View AD</a> : ""} */}
             </div>
           </form>
         </div>

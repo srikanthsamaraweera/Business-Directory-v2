@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@nextui-org/react";
 import EditBusiness from "./EditBusiness";
 import Image from "next/image";
+import TrafficLight from "../trafficlight";
 
 export default function Viewads() {
   const { data: session, status } = useSession();
@@ -47,9 +48,12 @@ export default function Viewads() {
     setCurrentPage(1);
   };
 
+
+
   if (editAdData) {
     return (
       <EditBusiness
+        id={editAdData?.id || ""}
         title={editAdData?.title || ""}
         type={editAdData?.category || ""}
         map={editAdData?.map || ""}
@@ -63,8 +67,8 @@ export default function Viewads() {
         image2={editAdData?.image2 || ""}
         simplefilename1={editAdData?.filename1 || ""}
         simplefilename2={editAdData?.filename2 || ""}
-        Saving="Save"
-        SetSaving={() => { }}
+        // Saving="Save"
+        // SetSaving={() => { }}
         randno={Math.floor(Math.random() * 1000000)}
         onBack={handleBackToList}
       />
@@ -100,6 +104,14 @@ export default function Viewads() {
                   objectFit="cover"
                   className="w-full h-full"
                 />
+              </div>
+              <div className="grid gap-2 grid-cols-2">
+                <div className="pl-2">
+                  <p>Approved: {rec.enabled}</p>
+                </div>
+                <div >
+                  <TrafficLight status={rec.enabled} />
+                </div>
               </div>
               <div className="grid gap-2 grid-cols-2">
                 <div className="bg-blue-200-100 p-4 font-khand text-[14pt] italic">{new Date(rec.date).toISOString().split('T')[0]}</div>
