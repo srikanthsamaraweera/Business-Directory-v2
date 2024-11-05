@@ -30,6 +30,7 @@ export default async function EditAd(formData, im1, im2, file1, file2, id) {
                 date: new Date(),
                 filename1: file1,
                 filename2: file2,
+                enabled: 'PENDING'
 
 
             },

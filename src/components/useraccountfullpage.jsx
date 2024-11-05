@@ -38,10 +38,7 @@ export default function UserAccountFullPage() {
           />
           //"Register business"
         );
-      case "edit":
-        return "edit";
-      case "delete":
-        return "delete";
+
       default:
         return <Viewads />;
     }

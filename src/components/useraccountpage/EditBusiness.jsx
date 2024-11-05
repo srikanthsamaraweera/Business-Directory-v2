@@ -223,7 +223,7 @@ const EditBusiness = ({
         confirm("Are you sure you want to save without any images") == true
       ) {
         setisverified("");
-        SetSaving("Saving...");
+        //  SetSaving("Saving...");
         await EditAd(formData, uploadurl, uploadurl2, filename1, filename2, id);
         await SetUSedInPost(filename1, filename2);
         RandomKeyset();
@@ -304,7 +304,7 @@ const EditBusiness = ({
             }}
           ></FontAwesomeIcon>
           <p className="font-khand md:text-5xl sm:text-3xl text-3xl">
-            Ad Submitted Sucessfully!
+            Ad Edited Sucessfully!
           </p>
           <div className="grid grid-cols-10">
             <div className="col-span-1 self-center">
@@ -409,7 +409,7 @@ const EditBusiness = ({
                       <p>{file1uploading}</p>
                       <Image
                         name="url1"
-                        src={fimage1}
+                        src={uploadurl}
                         alt="uploaded image"
                         width={300}
                         height={300}
@@ -430,7 +430,7 @@ const EditBusiness = ({
                       <p>{file2uploading}</p>
                       <Image
                         name="url2"
-                        src={fimage2}
+                        src={uploadurl2}
                         alt="uploaded image"
                         width={300}
                         height={300}
@@ -455,7 +455,7 @@ const EditBusiness = ({
               )}
             </div>
             <div className="form-field form-field-narrow" key={randomkey}>
-              <p>file1 {simplefname1}</p>
+              <p>file1 {filename1}</p>
               <p>file2 {simplefname2}</p>
             </div>
 
