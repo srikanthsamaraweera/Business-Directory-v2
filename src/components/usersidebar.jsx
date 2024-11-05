@@ -26,33 +26,13 @@ export default function UserSideBar(props) {
                 className="pink-text w-7 pr-2"
                 icon={faDisplay}
               />
-              View
+              View / Edit / Delete
             </a>
           </li>
           <li className=" font-khand flex cursor-pointer">
             <a className="flex" onClick={() => props.getmenuval("newreg")}>
               <FontAwesomeIcon className="pink-text w-7 pr-2" icon={faAdd} />
               New Registration
-            </a>
-          </li>
-          <li className=" font-khand flex">
-            <a
-              href="#"
-              className="flex"
-              onClick={() => props.getmenuval("edit")}
-            >
-              <FontAwesomeIcon className="pink-text w-7 pr-2" icon={faEdit} />
-              Edit
-            </a>
-          </li>
-          <li className=" font-khand flex">
-            <a
-              href="#"
-              className="flex"
-              onClick={() => props.getmenuval("delete")}
-            >
-              <FontAwesomeIcon className="pink-text w-7 pr-2" icon={faTrash} />
-              Delete
             </a>
           </li>
         </ul>

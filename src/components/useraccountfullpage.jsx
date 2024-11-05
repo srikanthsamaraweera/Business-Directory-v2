@@ -5,10 +5,12 @@ import { useState } from "react";
 import RegisterBusiness from "./useraccountpage/RegisterBusiness";
 import Viewads from "./useraccountpage/Viewads";
 import RandNum from "@/functions/generaterand";
+import EditBusiness from "./useraccountpage/EditBusiness";
 
 export default function UserAccountFullPage() {
   const [menuval, setmenuval] = useState("view");
   const [Saving, SetSaving] = useState("Register");
+  const [editAdData, setEditAdData] = useState(null);
   // const [randomno, setrandomno] = useState("1000");
 
   const getmenuval = (val) => {
@@ -36,12 +38,9 @@ export default function UserAccountFullPage() {
           />
           //"Register business"
         );
-      case "edit":
-        return "edit";
-      case "delete":
-        return "delete";
+
       default:
-        return "view";
+        return <Viewads />;
     }
   }
   return (

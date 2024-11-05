@@ -4,6 +4,7 @@ import { storage } from "../../firebaseconfig";
 import { PrismaClient } from "@prisma/client";
 
 export default async function deleteimages(filePath) {
+    console.log("filepath - ", filePath);
     // Create a reference to the file to delete
     const fileRef = ref(storage, filePath);
     const db = new PrismaClient();

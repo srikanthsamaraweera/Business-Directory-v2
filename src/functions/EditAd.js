@@ -4,13 +4,16 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 
-export default async function SaveAd(formData, im1, im2, file1, file2) {
+export default async function EditAd(formData, im1, im2, file1, file2, id) {
     const db = new PrismaClient();
     const session = await getServerSession(authOptions);
     console.log("imageurl: ", file1)
 
     try {
-        await db.post.create({
+        await db.post.update({
+            where: {
+                id: id, // ID of the record you want to update
+            },
             data: {
                 user_email: session.user.email, // Ensure this email exists in the users table
                 email: formData.get('ad_email'),
@@ -27,6 +30,7 @@ export default async function SaveAd(formData, im1, im2, file1, file2) {
                 date: new Date(),
                 filename1: file1,
                 filename2: file2,
+                enabled: 'PENDING'
 
 
             },

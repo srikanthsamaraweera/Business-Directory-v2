@@ -30,6 +30,8 @@ model post {
   district    String?   @db.VarChar(45)
   city        String?   @db.VarChar(45)
   date        DateTime? @db.DateTime(0)
+  filename1   String?   @db.VarChar(100)
+  filename2   String?   @db.VarChar(100)
   users       users?    @relation(fields: [user_email], references: [email], onDelete: NoAction, onUpdate: NoAction, map: "aduser")
 
   @@index([user_email], map: "aduser_idx")
