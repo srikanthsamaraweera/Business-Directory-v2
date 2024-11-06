@@ -5,32 +5,41 @@ import EditBusiness from "./EditBusiness";
 import Image from "next/image";
 import TrafficLight from "../trafficlight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateRight, faDumpster, faEdit, faRecycle, faRefresh, faTrash } from "@fortawesome/free-solid-svg-icons";
+import Paginator from "../pagination/paginator";
+import { fetchAds } from "@/functions/adfetch/fetchAds";
 
 
 export default function Viewads() {
   const { data: session, status } = useSession();
   const [records, setRecords] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [titleval, setTitleVal] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [editAdData, setEditAdData] = useState(null);
 
+  const [loading, setLoading] = useState('')
+
+  //pagination variables
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
 
   const fetchData = async () => {
-    try {
-      const response = await fetch(`/api/viewaduser?page=${currentPage}&limit=6&user_email=${session.user.email}&titleval=${searchTerm}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setRecords(data.records);
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
+    if (!session) return; // Ensure session is available
+    setLoading("Loading...")
+
+    const data = await fetchAds(currentPage, 6, session.user.email, searchTerm);
+    setLoading('');
+    setRecords(data.records);
+
+    setTotalPages(data.totalPages);
+
   };
+
+
 
   useEffect(() => {
     if (session) {
@@ -88,83 +97,128 @@ export default function Viewads() {
 
   return (
     <div className="p-5">
-      <div className="grid gap-2 grid-cols-[90%,10%]">
-        <div >
-          <form onSubmit={handleSearchSubmit} className="p-5 pt-0 flex items-center">
-            <input
-              type="text"
-              value={titleval}
-              onChange={(e) => setTitleVal(e.target.value)}
-              placeholder="Search by title"
-              className="w-[60%] px-4 m-4 mr-0 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#E429A9]"
-            />
-            <Button type="submit" className="w-[30%] px-4 m-4 ml-0 py-2 bg-[#E429A9] text-white rounded-l-none hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-[#E429A9]">
-              Search
-            </Button>
-          </form>
-        </div>
-        <div className="pt-5">
+      <div className=" w-[95%] grid gap-2 grid-cols-[5%,95%] m-auto">
+        <div className="flex items-center text-center">
           <FontAwesomeIcon
             title="Refresh"
             className="cursor-pointer  size-5 hover:opacity-50"
-            icon={faRefresh}
+            icon={faArrowRotateRight}
             onClick={() => {
               handleRefresh()
             }}
           ></FontAwesomeIcon>
         </div>
-      </div>
-
-
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-
-        {records.map((rec) => (
-          <div className="bg-gray-100 border-1 p-2 font-khand" key={rec.id}>
-            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 bg-white">
-              <div className="bg-blue-200-100 p-4 pb-0">
-                <h1 className="font-khand font-medium text-[18pt]">{rec.id} - {rec.title}</h1>
-              </div>
-              <div className="bg-blue-200-100 p-4 pt-0 pb-0 h-[200px] overflow-hidden relative">
-                <Image
-                  src={rec.image1 ? rec.image1 : "/no_image.webp"}
-                  alt="Description of the image"
-                  layout="fill"
-                  objectFit="cover"
-                  className="w-full h-full"
+        <div >
+          <form onSubmit={handleSearchSubmit} className="w-full flex items-center">
+            <div className="grid w-full grid-cols-[90%,10%]">
+              <div className="pr-2">
+                <input
+                  type="text"
+                  value={titleval}
+                  onChange={(e) => setTitleVal(e.target.value)}
+                  placeholder="Search by title"
+                  className="w-full h-full border border-black border-opacity-50 rounded-md p-1 italic rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#E429A9]"
                 />
               </div>
-              <div className="grid gap-2 grid-cols-2">
-                <div className="pl-2">
-                  <p>Approved: {rec.enabled}</p>
-                </div>
-                <div >
-                  <TrafficLight status={rec.enabled} />
-                </div>
+              <div className="text-center">
+                <Button type="submit" className="  bg-[#E429A9] text-white  hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-[#E429A9]">
+                  Search
+                </Button>
               </div>
-              <div className="grid gap-2 grid-cols-2">
-                <div className="bg-blue-200-100 p-4 font-khand text-[14pt] italic">{new Date(rec.date).toISOString().split('T')[0]}</div>
-                <div className="p-4 text-right">
-                  <FontAwesomeIcon
-                    title='Edit'
-                    className="cursor-pointer  size-5 hover:opacity-50"
-                    icon={faEdit}
-                    onClick={() => {
-                      handleEditClick(rec)
-                    }}
-                  ></FontAwesomeIcon>
+            </div>
 
+
+          </form>
+        </div>
+
+      </div>
+
+      <div>
+        {/* Paginator Component */}
+        <div className="mb-10 mt-10">
+          <Paginator
+
+            currentPage={currentPage}
+
+            totalPages={totalPages}
+
+            onPageChange={handlePageChange}
+
+          />
+        </div>
+
+      </div>
+      <div className="w-full italic font-khandbold text-large text-center">{loading}</div>
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+
+        {
+          loading === '' ? records.map((rec) => (
+            <div className="border-black border-opacity-50 border-1 rounded-xl font-khand m-2" key={rec.id}>
+              <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 bg-white rounded-xl">
+
+                <div className="bg-blue-200-100 p-4 pt-0 pb-0 h-[200px] overflow-hidden relative">
+                  <Image
+                    src={rec.image1 ? rec.image1 : "/no_image.webp"}
+                    alt="Description of the image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="w-full h-full rounded-t-xl rounded-tr-xl"
+                  />
+                </div>
+                <div className="bg-blue-200-100 p-4 pt-0 pb-0">
+                  <h1 className="font-khand font-semibold text-[18pt] text-center ">{rec.id} - {rec.title}</h1>
+                </div>
+                <div className="grid gap-2 grid-cols-2">
+                  <div className="pl-2 text-center">
+                    <p>Approved: {rec.enabled}</p>
+                    <p>{new Date(rec.date).toISOString().split('T')[0]}</p>
+                  </div>
+                  <div className="flex justify-end pr-5 items-start">
+                    <TrafficLight status={rec.enabled} />
+                  </div>
+                </div>
+                <div className="grid gap-2 grid-cols-2 pr-5 pl-5 pb-5">
+                  <div className=" text-left">
+                    <FontAwesomeIcon
+                      title='Edit'
+                      className="cursor-pointer  size-5 hover:opacity-50"
+                      icon={faTrash}
+                      onClick={() => {
+                        handleEditClick(rec)
+                      }}
+                    ></FontAwesomeIcon>
+
+                  </div>
+                  <div className=" text-right">
+                    <FontAwesomeIcon
+                      title='Edit'
+                      className="cursor-pointer  size-5 hover:opacity-50"
+                      icon={faEdit}
+                      onClick={() => {
+                        handleEditClick(rec)
+                      }}
+                    ></FontAwesomeIcon>
+
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          )) : ''}
       </div>
 
-      <div className="mt-3 text-center">
-        <Button className="bg-[#E429A9] font-khand text-white italic hover:cursor-pointer" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&lt;&lt;</Button>
-        <span className="italic"> Page {currentPage} of {totalPages} </span>
-        <Button className="bg-[#E429A9] font-khand text-white italic hover:cursor-pointer" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}> &gt;&gt;</Button>
+      {/* Paginator Component */}
+      <div className="mt-10">
+        <Paginator
+
+          currentPage={currentPage}
+
+          totalPages={totalPages}
+
+          onPageChange={handlePageChange}
+
+        />
       </div>
+
     </div>
   );
 }

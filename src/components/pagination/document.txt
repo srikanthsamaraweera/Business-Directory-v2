@@ -1,0 +1,18 @@
+ //pagination variables
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  {/* Paginator Component */}
+
+        <Paginator
+
+          currentPage={currentPage}
+
+          totalPages={totalPages}
+
+          onPageChange={handlePageChange}
+
+        />
