@@ -4,10 +4,29 @@ import "./topnav.css";
 import ProfileMenuButton from "./profilemenubutton";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { fetchUserLevel } from "@/functions/fetchuserdata/fetchUserLevel";
+import { useEffect, useState } from "react";
 
 export default function TopNavigation() {
   // Get session using the useSession hook
   const { data: session, status } = useSession();
+  const [userlevel, setuserlevel] = useState("");
+
+  const getuserlevel = async () => {
+    if (!session) return; // Ensure session is available
+
+    const data = await fetchUserLevel(session.user.email);
+    // console.log("userlevel - ", data.user_type);
+
+    setuserlevel(data.user_type);
+  };
+
+  useEffect(() => {
+    if (session) {
+      // console.log("useeffect works");
+      getuserlevel();
+    }
+  }, [session]);
 
   return (
     <div className="nav-box-shadow">
@@ -71,7 +90,10 @@ export default function TopNavigation() {
           </form>
         </div>
         <div className="sm:col-span-1 col-span-12 justify-center items-center flex">
-          <ProfileMenuButton usermail={session?.user?.email || ""} />
+          <ProfileMenuButton
+            usermail={session?.user?.email || ""}
+            userlevel={userlevel}
+          />
         </div>
       </div>
     </div>

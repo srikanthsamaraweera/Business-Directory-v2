@@ -49,7 +49,7 @@ export default function ProfileMenuButton(props) {
                   <span className="text-xl">
                     <FontAwesomeIcon icon={faUser} className="pink-text" />
                   </span>
-                  <span className="text-xl">User Account</span>
+                  <span className="text-xl">{props.userlevel} Account</span>
                 </span>
               </Link>
             </DropdownItem>

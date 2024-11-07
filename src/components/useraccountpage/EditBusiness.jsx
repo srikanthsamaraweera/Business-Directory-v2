@@ -11,7 +11,7 @@ import deleteimages from "@/functions/deleteimages";
 import saveTempImage, { SetUSedInPost } from "@/functions/tempImagesSave";
 import DelTempImageFromDB from "@/functions/tempImageDelDB";
 import citylist from "./cities";
-import EditAd from "@/functions/EditAd";
+import EditAd from "@/functions/adoperations/EditAd";
 import { Button } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faTimes } from "@fortawesome/free-solid-svg-icons";
