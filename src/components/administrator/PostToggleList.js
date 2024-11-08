@@ -11,7 +11,9 @@ export default function PostToggleList() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [togglingId, setTogglingId] = useState(null); // Track the ID of the post being toggled
+    const [searchQuery, setSearchQuery] = useState("");
+    const [togglingId, setTogglingId] = useState(null);
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
     const postsPerPage = 20;
 
     useEffect(() => {
@@ -30,7 +32,7 @@ export default function PostToggleList() {
             const data = await res.json();
             if (data.user_type === "admin") {
                 setIsAdmin(true);
-                fetchPosts(currentPage);
+                fetchPosts(currentPage, searchQuery, sortConfig);
             } else {
                 router.push("/");
             }
@@ -39,10 +41,11 @@ export default function PostToggleList() {
         }
     };
 
-    const fetchPosts = async (page) => {
+    const fetchPosts = async (page, query, sortConfig) => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/getPosts?page=${page}&limit=${postsPerPage}`);
+            const sortParam = sortConfig.key ? `&sortKey=${sortConfig.key}&sortDirection=${sortConfig.direction}` : "";
+            const res = await fetch(`/api/getPosts?page=${page}&limit=${postsPerPage}&search=${encodeURIComponent(query)}${sortParam}`);
             if (!res.ok) throw new Error("Failed to fetch posts");
 
             const data = await res.json();
@@ -56,7 +59,7 @@ export default function PostToggleList() {
     };
 
     const toggleEnabledStatus = async (postId, currentStatus) => {
-        setTogglingId(postId); // Set the toggling ID to the current post's ID
+        setTogglingId(postId);
         try {
             const res = await fetch("/api/toggleEnabled", {
                 method: "POST",
@@ -73,15 +76,29 @@ export default function PostToggleList() {
         } catch (error) {
             console.error("Error toggling status:", error);
         } finally {
-            setTogglingId(null); // Clear the toggling ID after the operation completes
+            setTogglingId(null);
         }
+    };
+
+    const handleSearch = () => {
+        setCurrentPage(1);
+        fetchPosts(1, searchQuery, sortConfig);
+    };
+
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+        fetchPosts(currentPage, searchQuery, { key, direction });
     };
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
             const nextPage = currentPage + 1;
             setCurrentPage(nextPage);
-            fetchPosts(nextPage);
+            fetchPosts(nextPage, searchQuery, sortConfig);
         }
     };
 
@@ -89,7 +106,7 @@ export default function PostToggleList() {
         if (currentPage > 1) {
             const previousPage = currentPage - 1;
             setCurrentPage(previousPage);
-            fetchPosts(previousPage);
+            fetchPosts(previousPage, searchQuery, sortConfig);
         }
     };
 
@@ -106,13 +123,40 @@ export default function PostToggleList() {
             <h2 className="text-2xl font-semibold text-center mb-4" style={{ color: "#E429A9" }}>
                 Admin Post Toggle List
             </h2>
+
+            {/* Search Bar */}
+            <div className="flex justify-center mb-6">
+                <input
+                    type="text"
+                    placeholder="Search by title or description..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    className="w-full max-w-md px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-600"
+                />
+                <button
+                    onClick={handleSearch}
+                    className="ml-4 px-4 py-2 bg-pink-600 text-white font-semibold rounded hover:bg-pink-700"
+                >
+                    Search
+                </button>
+            </div>
+
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-black border-opacity-50 rounded-lg shadow-md">
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="px-4 py-3 border-b border-gray-300 text-left w-1/6">Title & Images</th>
-                            <th className="px-4 py-3 border-b border-gray-300 text-left">Details</th>
-                            <th className="px-4 py-3 border-b border-gray-300 text-center w-1/12">Enabled</th>
+                            <th className="px-4 py-3 border-b border-gray-300 text-left">
+                                <button onClick={() => handleSort('date')} className="font-semibold">
+                                    Details (Date)
+                                </button>
+                            </th>
+                            <th className="px-4 py-3 border-b border-gray-300 text-center w-1/12">
+                                <button onClick={() => handleSort('enabled')} className="font-semibold">
+                                    Enabled
+                                </button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,7 +185,7 @@ export default function PostToggleList() {
                                         <div className="gap-3 flex flex-col">
                                             <div>
                                                 <h2 className="font-bold underline">{post.title}</h2>
-                                                <p className="text-wrap">{post.description}</p>
+                                                <p>{post.description}</p>
                                             </div>
                                             <div className="w-full h-px bg-gray-300"></div>
                                             <p>User Email: {post.user_email}</p>
@@ -167,7 +211,7 @@ export default function PostToggleList() {
                             ))
                         ) : (
                             <tr>
-                                <td className="px-4 py-3 text-center" colSpan="10">No posts available.</td>
+                                <td className="px-4 py-3 text-center" colSpan="3">No posts available.</td>
                             </tr>
                         )}
                     </tbody>
