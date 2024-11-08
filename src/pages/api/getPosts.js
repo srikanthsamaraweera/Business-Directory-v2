@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-    const { page = 1, limit = 20, search = "" } = req.query;
+    const { page = 1, limit = 20, search = "", sortKey = "date", sortDirection = "asc" } = req.query;
     const offset = (page - 1) * limit;
 
     try {
@@ -17,8 +17,13 @@ export default async function handler(req, res) {
             }
             : {};
 
+        // Construct order clause for sorting
+
+        const orderByClause = sortKey && sortDirection ? { [sortKey]: sortDirection } : {};
+
         const posts = await prisma.post.findMany({
             where: whereClause,
+            orderBy: orderByClause,
             skip: parseInt(offset),
             take: parseInt(limit),
         });
