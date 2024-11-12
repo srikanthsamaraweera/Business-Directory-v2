@@ -1,25 +1,21 @@
 // utils/checkFilesInDatabase.js
 import { fetchFirebaseFiles } from "./fetchFirebaseFiles";
-import { fetchDatabaseFiles } from "./fetchDatabaseFiles"; // Assume this function fetches the list from your database
+import { fetchDatabaseFiles } from "./fetchDatabaseFiles";
 
 export async function checkFilesInDatabase() {
     const firebaseFiles = await fetchFirebaseFiles();
     const dbFiles = await fetchDatabaseFiles();
 
-    // Extract the filename from each database URL
-    const dbFileNames = dbFiles.map((url) => {
-        const decodedUrl = decodeURIComponent(url); // Decode URL to get the exact filename
-        console.log("db files - ", decodedUrl)
-        return decodedUrl.split("/").pop().split("?")[0]; // Extract filename from URL
+    const dbFileNames = dbFiles.flat().map((url) => {
+        const decodedUrl = decodeURIComponent(url);
+        return decodedUrl.split("/").pop().split("?")[0];
     });
 
-    // Create a list showing whether each Firebase file exists in the database
-    const fileStatus = firebaseFiles.map((file) => {
-        return {
-            filename: file,
-            inDatabase: dbFileNames.includes(file) ? "Yes" : "No",
-        };
-    });
+    // Filter to include only files missing from the database
+    const missingFiles = firebaseFiles.filter(file => !dbFileNames.includes(file));
 
-    return fileStatus;
+    return missingFiles.map(file => ({
+        filename: file,
+        inDatabase: "No"  // Mark as not present in the database
+    }));
 }
