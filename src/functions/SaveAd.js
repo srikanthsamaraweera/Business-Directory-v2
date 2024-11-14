@@ -18,6 +18,7 @@ export default async function SaveAd(formData, im1, im2, file1, file2) {
                 description: formData.get('ad_description'),
                 category: formData.get('ad_type'),
                 phone: formData.get('ad_telephone'),
+                address: formData.get('ad_address'),
                 image1: im1,
                 image2: im2,
                 image3: im2,
